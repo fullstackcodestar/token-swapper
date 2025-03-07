@@ -136,80 +136,98 @@ const ExchangeForm: React.FC<ExchangeFormProps> = ({ className }) => {
       </div>
       
       <div className="relative">
-        {/* Send section */}
-        <div className="mb-14">
-          <div className="flex justify-between items-center mb-1">
-            <label className="text-white opacity-80 text-sm">Send</label>
-            <span className="text-white opacity-80 text-sm">{sendToken.name}</span>
-          </div>
-          
-          <div className="input-send relative">
-            <div className="flex items-center p-2">
-              <input
-                type="text"
-                value={sendAmount}
-                onChange={(e) => {
-                  const value = e.target.value.replace(/[^0-9.]/g, '');
-                  setSendAmount(value);
-                }}
-                className="flex-1 bg-transparent text-xl text-white p-2 focus:outline-none"
-                placeholder="0"
-              />
-              <TokenSelector
-                selectedToken={sendToken}
-                onTokenSelect={setSendToken}
-                variant="send"
-              />
+        {/* Exchange inputs container */}
+        <div className="relative flex flex-col md:flex-row gap-8 mb-8">
+          {/* Send section */}
+          <div className="w-full">
+            <div className="flex justify-between items-center mb-1">
+              <label className="text-white opacity-80 text-sm">Send</label>
+              <span className="text-white opacity-80 text-sm">{sendToken.name}</span>
+            </div>
+            
+            <div className="input-send relative">
+              <div className="flex items-center p-2">
+                <input
+                  type="text"
+                  value={sendAmount}
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/[^0-9.]/g, '');
+                    setSendAmount(value);
+                  }}
+                  className="flex-1 bg-transparent text-xl text-white p-2 focus:outline-none"
+                  placeholder="0"
+                />
+                <TokenSelector
+                  selectedToken={sendToken}
+                  onTokenSelect={setSendToken}
+                  variant="send"
+                />
+              </div>
+            </div>
+            
+            <div className="flex justify-between text-sm mt-1">
+              <div className="text-gray-400">
+                min: 0.005 {sendToken.symbol}
+              </div>
+              <div className="text-gray-400">
+                max: 13.1264821 {sendToken.symbol}
+              </div>
             </div>
           </div>
           
-          <div className="flex justify-between text-sm mt-1">
-            <div className="text-gray-400">
-              1 {sendToken.symbol} = {getExchangeRate(sendToken.symbol, receiveToken.symbol)} {receiveToken.symbol}
+          {/* Switch button */}
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 md:block hidden">
+            <button 
+              onClick={handleSwitchTokens} 
+              className="flex items-center justify-center w-10 h-10 text-blue-400 bg-transparent"
+            >
+              <ArrowLeftRight className="w-6 h-6" />
+            </button>
+          </div>
+          
+          {/* Receive section */}
+          <div className="w-full">
+            <div className="flex justify-between items-center mb-1">
+              <label className="text-blue-400 text-sm">Receive</label>
+              <span className="text-blue-400 text-sm">{receiveToken.name}</span>
             </div>
-            <div className="text-gray-400">
-              ${getUsdValue(sendAmount, sendToken)}
+            
+            <div className="input-receive relative">
+              <div className="flex items-center p-2">
+                <input
+                  type="text"
+                  value={receiveAmount}
+                  readOnly
+                  className="flex-1 bg-transparent text-xl text-white p-2 focus:outline-none"
+                  placeholder="0"
+                />
+                <TokenSelector
+                  selectedToken={receiveToken}
+                  onTokenSelect={setReceiveToken}
+                  variant="receive"
+                />
+              </div>
+            </div>
+            
+            <div className="flex justify-between text-sm mt-1">
+              <div className="text-gray-400">
+                1 {receiveToken.symbol} = {getExchangeRate(receiveToken.symbol, sendToken.symbol)} {sendToken.symbol}
+              </div>
+              <div className="text-gray-400">
+                ${getUsdValue(receiveAmount, receiveToken)}
+              </div>
             </div>
           </div>
         </div>
         
-        {/* Switch button */}
-        <div className="switch-button" onClick={handleSwitchTokens}>
-          <ArrowLeftRight className="w-5 h-5 text-blue-300" />
-        </div>
-        
-        {/* Receive section */}
-        <div className="mb-8">
-          <div className="flex justify-between items-center mb-1">
-            <label className="text-blue-300 text-sm">Receive</label>
-            <span className="text-blue-300 text-sm">{receiveToken.name}</span>
-          </div>
-          
-          <div className="input-receive relative">
-            <div className="flex items-center p-2">
-              <input
-                type="text"
-                value={receiveAmount}
-                readOnly
-                className="flex-1 bg-transparent text-xl text-white p-2 focus:outline-none"
-                placeholder="0"
-              />
-              <TokenSelector
-                selectedToken={receiveToken}
-                onTokenSelect={setReceiveToken}
-                variant="receive"
-              />
-            </div>
-          </div>
-          
-          <div className="flex justify-between text-sm mt-1">
-            <div className="text-gray-400">
-              1 {receiveToken.symbol} = {getExchangeRate(receiveToken.symbol, sendToken.symbol)} {sendToken.symbol}
-            </div>
-            <div className="text-gray-400">
-              ${getUsdValue(receiveAmount, receiveToken)}
-            </div>
-          </div>
+        {/* Mobile switch button */}
+        <div className="md:hidden flex justify-center my-4">
+          <button 
+            onClick={handleSwitchTokens} 
+            className="flex items-center justify-center w-10 h-10 rounded-full bg-[#1c1f2e] border border-gray-700"
+          >
+            <ArrowLeftRight className="w-5 h-5 text-blue-300" />
+          </button>
         </div>
         
         {/* Destination address */}
@@ -224,7 +242,7 @@ const ExchangeForm: React.FC<ExchangeFormProps> = ({ className }) => {
               value={destinationAddress}
               onChange={(e) => setDestinationAddress(e.target.value)}
               placeholder={`Your ${receiveToken.name} address`}
-              className="destination-input"
+              className="w-full bg-[#1c1e2a] text-white border border-pink-500/30 rounded-xl p-4 pr-20 focus:outline-none focus:border-blue-500/50 transition-all duration-300"
             />
             <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center space-x-2">
               <button 
@@ -245,17 +263,6 @@ const ExchangeForm: React.FC<ExchangeFormProps> = ({ className }) => {
           <div>
             <div className="flex items-center gap-2 mb-2">
               <span className="text-white opacity-80 text-sm">Order type</span>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <HelpCircle className="w-4 h-4 text-gray-400" />
-                  </TooltipTrigger>
-                  <TooltipContent className="bg-[#242942] border-gray-700 text-gray-200 max-w-xs">
-                    <p><strong>Fixed rate:</strong> Exchange rate is locked in when you place your order. Fee is 1.0%.</p>
-                    <p className="mt-2"><strong>Float rate:</strong> Exchange rate will be determined at the time of exchange. Fee is 0.5%.</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
             </div>
             
             <div className="order-tabs">
@@ -277,6 +284,18 @@ const ExchangeForm: React.FC<ExchangeFormProps> = ({ className }) => {
               >
                 Float rate (0.5%)
               </div>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger className="ml-2 text-gray-400 hover:text-white">
+                    <HelpCircle className="w-5 h-5" />
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" className="bg-[#242942] border-gray-700 text-gray-200 max-w-xs p-3">
+                    <h4 className="font-semibold text-white mb-1">What is the difference?</h4>
+                    <p className="mb-2"><strong>Fixed rate:</strong> Exchange rate is locked in when you place your order. Fee is 1.0%.</p>
+                    <p><strong>Float rate:</strong> Exchange rate will be determined at the time of exchange. Fee is 0.5%.</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </div>
           </div>
           
@@ -301,7 +320,7 @@ const ExchangeForm: React.FC<ExchangeFormProps> = ({ className }) => {
         
         {/* Exchange info */}
         <div className="mt-6 text-xs text-gray-400 text-center">
-          <p className="mb-1">The exchange service is provided by <span className="text-blue-400">FixedFloat</span>. Creating an order confirms your agreement with the FixedFloat rules.</p>
+          <p className="mb-1">The exchange service is provided by <span className="text-blue-400">FixedFloat</span>. Creating an order confirms your agreement with the <span className="text-blue-400">FixedFloat</span> rules.</p>
           <p>By using the site and creating an exchange, you agree to the Payrius' <span className="text-blue-400 cursor-pointer">Terms of Services</span> and <span className="text-blue-400 cursor-pointer">Privacy Policy</span>.</p>
         </div>
       </div>

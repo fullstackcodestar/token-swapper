@@ -7,7 +7,7 @@ import { Zap } from 'lucide-react';
 
 const Index = () => {
   return (
-    <div className="relative min-h-screen">
+    <div className="relative min-h-screen overflow-hidden">
       {/* Background */}
       <div className="main-background"></div>
       
