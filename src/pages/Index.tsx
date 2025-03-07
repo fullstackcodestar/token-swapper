@@ -1,12 +1,33 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import React from 'react';
+import ExchangeForm from '@/components/ExchangeForm';
+import BackgroundWave from '@/components/BackgroundWave';
+import { Zap } from 'lucide-react';
 
 const Index = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
-      </div>
+    <div className="relative min-h-screen">
+      {/* Background */}
+      <div className="main-background"></div>
+      
+      {/* Header */}
+      <header className="relative z-10 pt-4 px-4 flex justify-between items-center">
+        <div className="flex items-center space-x-2">
+          <Zap className="w-6 h-6 text-blue-400" />
+          <Zap className="w-6 h-6 text-blue-300" />
+          <Zap className="w-6 h-6 text-blue-200" />
+        </div>
+      </header>
+      
+      {/* Main content */}
+      <main className="relative z-10 px-4 py-12 flex flex-col items-center justify-center">
+        <div className="w-full max-w-3xl mx-auto">
+          <ExchangeForm />
+        </div>
+      </main>
+      
+      {/* Background wave decoration */}
+      <BackgroundWave />
     </div>
   );
 };

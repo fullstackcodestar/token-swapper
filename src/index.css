@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -35,19 +36,12 @@
     --radius: 0.5rem;
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
@@ -96,6 +90,122 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-exchange-dark text-foreground;
   }
+}
+
+/* Custom styles for the exchange platform */
+.main-background {
+  background-image: linear-gradient(0deg, #0c0d16 30%, #151b22 100%);
+  height: 120%;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 0;
+}
+
+.token-selector {
+  @apply relative flex items-center gap-2 bg-transparent cursor-pointer p-1 rounded-md transition-all duration-300;
+}
+
+.token-selector:hover {
+  @apply bg-opacity-20 bg-white;
+}
+
+.input-send {
+  @apply bg-exchange-sendBg border border-gray-700 rounded-xl transition-all duration-300;
+}
+
+.input-send:focus-within {
+  @apply border-blue-500/50 shadow-md shadow-blue-500/20;
+}
+
+.input-receive {
+  @apply bg-exchange-receiveBg border border-gray-700 rounded-xl transition-all duration-300;
+}
+
+.input-receive:focus-within {
+  @apply border-blue-500/50 shadow-md shadow-blue-500/20;
+}
+
+.token-list {
+  @apply absolute top-full mt-2 right-0 w-80 bg-[#1a1d2e] border border-gray-700 rounded-lg shadow-xl z-50 overflow-hidden opacity-0 invisible transition-all duration-300 translate-y-2;
+}
+
+.token-list.visible {
+  @apply opacity-100 visible translate-y-0;
+}
+
+.token-search {
+  @apply bg-[#181c31] border-b border-gray-700 p-3;
+}
+
+.token-search input {
+  @apply w-full bg-[#242942] border-none text-white placeholder-gray-400 p-2 pl-9 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500/50;
+}
+
+.token-item {
+  @apply flex items-center justify-between px-4 py-3 hover:bg-[#242942] transition-colors cursor-pointer;
+}
+
+.token-item-active {
+  @apply bg-[#242942];
+}
+
+.token-divider {
+  @apply border-t border-gray-700 my-1 opacity-50;
+}
+
+.switch-button {
+  @apply absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-full bg-[#1c1f2e] border border-gray-700 cursor-pointer hover:border-blue-500/50 transition-all duration-300 z-10;
+}
+
+.switch-button:hover {
+  @apply bg-[#242942] shadow-md shadow-blue-500/20;
+}
+
+.order-tabs {
+  @apply flex text-sm rounded-lg overflow-hidden border border-gray-700;
+}
+
+.order-tab {
+  @apply px-4 py-2 cursor-pointer;
+}
+
+.order-tab-active {
+  @apply bg-blue-500 text-white;
+}
+
+.order-tab-inactive {
+  @apply bg-[#242942] text-gray-300 hover:bg-[#2a304e] transition-colors;
+}
+
+.exchange-button {
+  @apply px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg shadow-md shadow-blue-500/20 transition-all duration-300;
+}
+
+.exchange-button:hover {
+  @apply shadow-lg shadow-blue-500/30 translate-y-[-1px];
+}
+
+.exchange-button:active {
+  @apply shadow-sm shadow-blue-500/10 translate-y-[1px];
+}
+
+.glass-panel {
+  @apply bg-opacity-10 bg-white backdrop-blur-md border border-white/10 rounded-2xl;
+}
+
+@keyframes background-wave {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.background-wave {
+  animation: background-wave 15s ease-in-out infinite;
 }
