@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowLeftRight, Copy, HelpCircle, QrCode } from 'lucide-react';
 import { toast } from "sonner";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import TokenSelector, { Token } from './TokenSelector';
 import { cn } from '@/lib/utils';
 
@@ -118,8 +119,12 @@ const ExchangeForm: React.FC<ExchangeFormProps> = ({ className }) => {
   const handleCopyAddress = () => {
     if (destinationAddress) {
       navigator.clipboard.writeText(destinationAddress);
-      toast("Address copied to clipboard", {
-        description: "The destination address has been copied.",
+      toast.success("Address copied to clipboard", {
+        description: "The destination address has been copied."
+      });
+    } else {
+      toast.error("No address to copy", {
+        description: "Please enter a destination address first."
       });
     }
   };
@@ -219,7 +224,7 @@ const ExchangeForm: React.FC<ExchangeFormProps> = ({ className }) => {
               value={destinationAddress}
               onChange={(e) => setDestinationAddress(e.target.value)}
               placeholder={`Your ${receiveToken.name} address`}
-              className="w-full bg-[#1c1e2a] text-white border border-gray-700 rounded-xl p-4 pr-20 focus:outline-none focus:border-blue-500/50 transition-all duration-300"
+              className="destination-input"
             />
             <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center space-x-2">
               <button 
@@ -240,7 +245,17 @@ const ExchangeForm: React.FC<ExchangeFormProps> = ({ className }) => {
           <div>
             <div className="flex items-center gap-2 mb-2">
               <span className="text-white opacity-80 text-sm">Order type</span>
-              <HelpCircle className="w-4 h-4 text-gray-400" />
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <HelpCircle className="w-4 h-4 text-gray-400" />
+                  </TooltipTrigger>
+                  <TooltipContent className="bg-[#242942] border-gray-700 text-gray-200 max-w-xs">
+                    <p><strong>Fixed rate:</strong> Exchange rate is locked in when you place your order. Fee is 1.0%.</p>
+                    <p className="mt-2"><strong>Float rate:</strong> Exchange rate will be determined at the time of exchange. Fee is 0.5%.</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </div>
             
             <div className="order-tabs">
@@ -286,7 +301,7 @@ const ExchangeForm: React.FC<ExchangeFormProps> = ({ className }) => {
         
         {/* Exchange info */}
         <div className="mt-6 text-xs text-gray-400 text-center">
-          <p className="mb-1">The exchange service is provided by FixedFloat. Creating an order confirms your agreement with the FixedFloat rules.</p>
+          <p className="mb-1">The exchange service is provided by <span className="text-blue-400">FixedFloat</span>. Creating an order confirms your agreement with the FixedFloat rules.</p>
           <p>By using the site and creating an exchange, you agree to the Payrius' <span className="text-blue-400 cursor-pointer">Terms of Services</span> and <span className="text-blue-400 cursor-pointer">Privacy Policy</span>.</p>
         </div>
       </div>

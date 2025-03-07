@@ -2,6 +2,7 @@
 import React from 'react';
 import ExchangeForm from '@/components/ExchangeForm';
 import BackgroundWave from '@/components/BackgroundWave';
+import FallingStars from '@/components/FallingStars';
 import { Zap } from 'lucide-react';
 
 const Index = () => {
@@ -9,6 +10,9 @@ const Index = () => {
     <div className="relative min-h-screen">
       {/* Background */}
       <div className="main-background"></div>
+      
+      {/* Falling stars animation */}
+      <FallingStars />
       
       {/* Header */}
       <header className="relative z-10 pt-4 px-4 flex justify-between items-center">

@@ -40,6 +40,7 @@ const TokenSelector: React.FC<TokenSelectorProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const selectorRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   const filteredTokens = tokens.filter(token => 
@@ -78,9 +79,13 @@ const TokenSelector: React.FC<TokenSelectorProps> = ({
     };
   }, []);
 
+  const textColor = variant === 'send' ? 'text-white' : 'text-blue-300';
+  const symbolColor = variant === 'send' ? 'text-orange-400' : 'text-blue-300';
+
   return (
     <div className={cn("relative", className)} ref={dropdownRef}>
       <div
+        ref={selectorRef}
         className={cn(
           "token-selector",
           variant === 'send' ? "text-white" : "text-blue-300"
@@ -88,7 +93,7 @@ const TokenSelector: React.FC<TokenSelectorProps> = ({
         onClick={toggleDropdown}
       >
         <TokenIcon symbol={selectedToken.shortSymbol} />
-        <span className="font-medium">{selectedToken.symbol}</span>
+        <span className={cn("font-medium", symbolColor)}>{selectedToken.symbol}</span>
         <ChevronDown className="h-4 w-4 opacity-70" />
       </div>
 
@@ -107,10 +112,10 @@ const TokenSelector: React.FC<TokenSelectorProps> = ({
           </div>
         </div>
 
-        {popularTokens.length > 0 && (
-          <>
-            <div className="px-4 py-2 text-sm text-gray-400">Popular currencies</div>
-            <div className="max-h-[200px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent">
+        <div className="max-h-[300px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent">
+          {popularTokens.length > 0 && (
+            <>
+              <div className="px-4 py-2 text-sm text-gray-400">Popular currencies</div>
               {popularTokens.map((token) => (
                 <div
                   key={token.symbol}
@@ -129,18 +134,22 @@ const TokenSelector: React.FC<TokenSelectorProps> = ({
                       )}
                     </div>
                   </div>
-                  <div className="text-right font-medium text-gray-300">{token.symbol}</div>
+                  <div className={cn("text-right font-medium", 
+                    token.shortSymbol === 'BTC' ? 'text-orange-400' : 
+                    token.shortSymbol === 'ETH' ? 'text-indigo-300' :
+                    token.shortSymbol === 'USDT' ? 'text-green-400' :
+                    token.shortSymbol === 'LTC' ? 'text-blue-300' :
+                    token.shortSymbol === 'XMR' ? 'text-orange-500' :
+                    'text-gray-300'
+                  )}>{token.symbol}</div>
                 </div>
               ))}
-            </div>
-            <div className="token-divider"></div>
-          </>
-        )}
+            </>
+          )}
 
-        {allTokens.length > 0 && (
-          <>
-            <div className="px-4 py-2 text-sm text-gray-400">All currencies</div>
-            <div className="max-h-[200px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent">
+          {allTokens.length > 0 && (
+            <>
+              <div className="px-4 py-2 text-sm text-gray-400">All currencies</div>
               {allTokens.map((token) => (
                 <div
                   key={token.symbol}
@@ -159,16 +168,22 @@ const TokenSelector: React.FC<TokenSelectorProps> = ({
                       )}
                     </div>
                   </div>
-                  <div className="text-right font-medium text-gray-300">{token.symbol}</div>
+                  <div className={cn("text-right font-medium", 
+                    token.shortSymbol === 'ZRX' ? 'text-gray-300' : 
+                    token.shortSymbol === 'AAVE' ? 'text-purple-400' :
+                    token.shortSymbol === 'AVAX' ? 'text-red-400' :
+                    token.shortSymbol === 'BNB' ? 'text-yellow-400' :
+                    'text-gray-300'
+                  )}>{token.symbol}</div>
                 </div>
               ))}
-            </div>
-          </>
-        )}
+            </>
+          )}
 
-        {filteredTokens.length === 0 && (
-          <div className="p-4 text-center text-gray-400">No tokens found</div>
-        )}
+          {filteredTokens.length === 0 && (
+            <div className="p-4 text-center text-gray-400">No tokens found</div>
+          )}
+        </div>
       </div>
     </div>
   );

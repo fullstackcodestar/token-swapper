@@ -122,7 +122,7 @@
 }
 
 .input-receive {
-  @apply bg-exchange-receiveBg border border-gray-700 rounded-xl transition-all duration-300;
+  @apply bg-exchange-receiveBg border border-blue-600/30 rounded-xl transition-all duration-300;
 }
 
 .input-receive:focus-within {
@@ -130,7 +130,7 @@
 }
 
 .token-list {
-  @apply absolute top-full mt-2 right-0 w-80 bg-[#1a1d2e] border border-gray-700 rounded-lg shadow-xl z-50 overflow-hidden opacity-0 pointer-events-none transition-all duration-300 translate-y-2;
+  @apply absolute top-full mt-2 right-0 w-full bg-[#1a1d2e] border border-gray-700 rounded-lg shadow-xl z-50 overflow-hidden opacity-0 pointer-events-none transition-all duration-300 translate-y-2;
 }
 
 /* Fix the circular dependency by removing @apply visible */
@@ -211,4 +211,48 @@
 
 .background-wave {
   animation: background-wave 15s ease-in-out infinite;
+}
+
+/* Falling stars animation */
+.stars-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  box-shadow: 0 0 3px 1px rgba(255, 255, 255, 0.3);
+  animation: shooting-star linear;
+}
+
+@keyframes shooting-star {
+  0% {
+    transform: translate(var(--startX), var(--startY)) rotate(var(--rotation)) scale(0);
+    opacity: 0;
+  }
+  5% {
+    transform: translate(var(--startX), var(--startY)) rotate(var(--rotation)) scale(1);
+    opacity: 1;
+  }
+  90% {
+    transform: translate(var(--endX), var(--endY)) rotate(var(--rotation)) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--endX), var(--endY)) rotate(var(--rotation)) scale(0);
+    opacity: 0;
+  }
+}
+
+.destination-input {
+  @apply w-full bg-[#1c1e2a] text-white border border-red-500/30 rounded-xl p-4 pr-20 focus:outline-none focus:border-blue-500/50 transition-all duration-300;
 }
