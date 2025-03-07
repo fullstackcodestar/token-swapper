@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { ArrowLeftRight, Copy, HelpCircle, QrCode } from 'lucide-react';
 import { toast } from "sonner";
@@ -137,7 +136,7 @@ const ExchangeForm: React.FC<ExchangeFormProps> = ({ className }) => {
       
       <div className="relative">
         {/* Exchange inputs container */}
-        <div className="relative flex flex-row gap-8 mb-8">
+        <div className="relative flex flex-row gap-4 mb-8">
           {/* Send section */}
           <div className="w-full">
             <div className="flex justify-between items-center mb-1">
@@ -179,7 +178,7 @@ const ExchangeForm: React.FC<ExchangeFormProps> = ({ className }) => {
           <div className="flex items-center justify-center z-10">
             <button 
               onClick={handleSwitchTokens} 
-              className="flex items-center justify-center text-blue-400 bg-transparent"
+              className="flex items-center justify-center text-blue-400"
             >
               <ArrowLeftRight className="w-6 h-6" />
             </button>
