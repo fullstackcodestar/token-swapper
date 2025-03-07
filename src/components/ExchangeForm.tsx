@@ -242,7 +242,7 @@ const ExchangeForm: React.FC<ExchangeFormProps> = ({ className }) => {
               value={destinationAddress}
               onChange={(e) => setDestinationAddress(e.target.value)}
               placeholder={`Your ${receiveToken.name} address`}
-              className="w-full bg-[#1c1e2a] text-white border border-pink-500/30 rounded-xl p-4 pr-20 focus:outline-none focus:border-blue-500/50 transition-all duration-300"
+              className="w-full bg-[#1c1e2a] text-white border border-[#ff1493] rounded-xl p-4 pr-20 focus:outline-none focus:border-blue-500/50 transition-all duration-300"
             />
             <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center space-x-2">
               <button 
@@ -284,6 +284,7 @@ const ExchangeForm: React.FC<ExchangeFormProps> = ({ className }) => {
               >
                 Float rate (0.5%)
               </div>
+            </div>
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger className="ml-2 text-gray-400 hover:text-white">
@@ -296,7 +297,6 @@ const ExchangeForm: React.FC<ExchangeFormProps> = ({ className }) => {
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
-            </div>
           </div>
           
           <button
