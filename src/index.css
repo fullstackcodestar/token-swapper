@@ -86,7 +86,7 @@
 
 @layer base {
   * {
-    @apply border-border;
+    border-color: transparent
   }
 
   body {
@@ -114,7 +114,7 @@
 }
 
 .input-send {
-  @apply bg-exchange-sendBg border border-gray-700 rounded-xl transition-all duration-300;
+  @apply bg-[#00000080] border border-gray-700 rounded-xl transition-all duration-300;
 }
 
 .input-send:focus-within {
@@ -122,7 +122,7 @@
 }
 
 .input-receive {
-  @apply bg-exchange-receiveBg border border-blue-600/30 rounded-xl transition-all duration-300;
+  @apply bg-[#00000080] border border-blue-600/30 rounded-xl transition-all duration-300;
 }
 
 .input-receive:focus-within {
@@ -161,19 +161,26 @@
 }
 
 .order-tabs {
-  @apply flex text-sm rounded-lg overflow-hidden border border-[#008FDF];
+  @apply flex text-sm rounded-lg overflow-hidden border;
 }
-
+.order-tabs .order-tab:first-child {
+  border-top-left-radius: 11px;
+  border-bottom-left-radius: 11px;
+}
+.order-tabs .order-tab:last-child {
+  border-top-right-radius: 11px;
+  border-bottom-right-radius: 11px;
+}
 .order-tab {
-  @apply px-4 py-2 cursor-pointer;
+  @apply px-8 py-4 cursor-pointer bg-[#00000080] font-bold font-[#ffffff73];
 }
 
 .order-tab-active {
-  @apply bg-transparent border-[#008FDF] text-[#008FDF];
+  @apply border-[#008FDF] border-[1px] text-[#008FDF];
 }
 
 .order-tab-inactive {
-  @apply bg-transparent text-gray-300 hover:bg-[#2a304e] transition-colors;
+  @apply text-gray-300 hover:bg-[#2a304e] transition-colors;
 }
 
 .exchange-button {

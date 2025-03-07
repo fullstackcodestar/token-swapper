@@ -153,7 +153,7 @@ const ExchangeForm: React.FC<ExchangeFormProps> = ({ className }) => {
                     const value = e.target.value.replace(/[^0-9.]/g, '');
                     setSendAmount(value);
                   }}
-                  className="flex-1 bg-transparent text-xl text-white p-2 focus:outline-none"
+                  className="flex-1 bg-[transparent] text-2xl text-white p-2 focus:outline-none"
                   placeholder="0"
                 />
                 <TokenSelector
@@ -197,7 +197,7 @@ const ExchangeForm: React.FC<ExchangeFormProps> = ({ className }) => {
                   type="text"
                   value={receiveAmount}
                   readOnly
-                  className="flex-1 bg-transparent text-xl text-white p-2 focus:outline-none"
+                  className="flex-1 bg-transparent text-2xl text-white p-2 focus:outline-none"
                   placeholder="0"
                 />
                 <TokenSelector
@@ -241,7 +241,7 @@ const ExchangeForm: React.FC<ExchangeFormProps> = ({ className }) => {
               value={destinationAddress}
               onChange={(e) => setDestinationAddress(e.target.value)}
               placeholder={`Your ${receiveToken.name} address`}
-              className="w-full bg-[#1c1e2a] text-white border border-gray-700 rounded-xl p-4 pr-20 focus:outline-none focus:border-blue-500/50 transition-all duration-300"
+              className="w-full bg-[#00000080] text-white border border-[#ff1493] rounded-xl p-4 pr-20 transition-all duration-300"
             />
             <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center space-x-2">
               <button 
@@ -261,7 +261,7 @@ const ExchangeForm: React.FC<ExchangeFormProps> = ({ className }) => {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-white opacity-80 text-sm">Order type</span>
+              <span className="text-white text-sm font-bold">Order type</span>
               
               <div className="order-tabs">
                 <div 
