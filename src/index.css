@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -160,19 +161,19 @@
 }
 
 .order-tabs {
-  @apply flex text-sm rounded-lg overflow-hidden border bg-[#00000080];
+  @apply flex text-sm rounded-lg overflow-hidden border border-[#008FDF];
 }
 
 .order-tab {
-  @apply px-4 py-2 cursor-pointer bg-[#00000080];
+  @apply px-4 py-2 cursor-pointer;
 }
 
 .order-tab-active {
-  @apply border-[#008FDF] text-[#008FDF];
+  @apply bg-transparent border-[#008FDF] text-[#008FDF];
 }
 
 .order-tab-inactive {
-  @apply text-gray-300 hover:bg-[#2a304e] transition-colors;
+  @apply bg-transparent text-gray-300 hover:bg-[#2a304e] transition-colors;
 }
 
 .exchange-button {

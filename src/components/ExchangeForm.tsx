@@ -137,7 +137,7 @@ const ExchangeForm: React.FC<ExchangeFormProps> = ({ className }) => {
       
       <div className="relative">
         {/* Exchange inputs container */}
-        <div className="relative flex flex-col md:flex-row gap-8 mb-8">
+        <div className="relative flex flex-row gap-8 mb-8">
           {/* Send section */}
           <div className="w-full">
             <div className="flex justify-between items-center mb-1">
@@ -176,10 +176,10 @@ const ExchangeForm: React.FC<ExchangeFormProps> = ({ className }) => {
           </div>
           
           {/* Switch button */}
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 md:block hidden">
+          <div className="flex items-center justify-center z-10">
             <button 
               onClick={handleSwitchTokens} 
-              className="flex items-center justify-center w-10 h-10 text-blue-400 bg-transparent"
+              className="flex items-center justify-center text-blue-400 bg-transparent"
             >
               <ArrowLeftRight className="w-6 h-6" />
             </button>
@@ -220,7 +220,7 @@ const ExchangeForm: React.FC<ExchangeFormProps> = ({ className }) => {
           </div>
         </div>
         
-        {/* Mobile switch button */}
+        {/* Mobile switch button - only shown on mobile */}
         <div className="md:hidden flex justify-center my-4">
           <button 
             onClick={handleSwitchTokens} 
@@ -242,7 +242,7 @@ const ExchangeForm: React.FC<ExchangeFormProps> = ({ className }) => {
               value={destinationAddress}
               onChange={(e) => setDestinationAddress(e.target.value)}
               placeholder={`Your ${receiveToken.name} address`}
-              className="w-full bg-[#1c1e2a] text-white border border-[#ff1493] rounded-xl p-4 pr-20 focus:outline-none focus:border-blue-500/50 transition-all duration-300"
+              className="w-full bg-[#1c1e2a] text-white border border-gray-700 rounded-xl p-4 pr-20 focus:outline-none focus:border-blue-500/50 transition-all duration-300"
             />
             <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center space-x-2">
               <button 
@@ -261,33 +261,33 @@ const ExchangeForm: React.FC<ExchangeFormProps> = ({ className }) => {
         {/* Order type and exchange button */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
-            <div className="flex items-center gap-2 mb-2">
+            <div className="flex items-center gap-2">
               <span className="text-white opacity-80 text-sm">Order type</span>
-            </div>
-            
-            <div className="order-tabs">
-              <div 
-                className={cn(
-                  "order-tab", 
-                  orderType === 'fixed' ? "order-tab-active" : "order-tab-inactive"
-                )}
-                onClick={() => setOrderType('fixed')}
-              >
-                Fixed rate (1.0%)
+              
+              <div className="order-tabs">
+                <div 
+                  className={cn(
+                    "order-tab", 
+                    orderType === 'fixed' ? "order-tab-active" : "order-tab-inactive"
+                  )}
+                  onClick={() => setOrderType('fixed')}
+                >
+                  Fixed rate (1.0%)
+                </div>
+                <div 
+                  className={cn(
+                    "order-tab", 
+                    orderType === 'float' ? "order-tab-active" : "order-tab-inactive"
+                  )}
+                  onClick={() => setOrderType('float')}
+                >
+                  Float rate (0.5%)
+                </div>
               </div>
-              <div 
-                className={cn(
-                  "order-tab", 
-                  orderType === 'float' ? "order-tab-active" : "order-tab-inactive"
-                )}
-                onClick={() => setOrderType('float')}
-              >
-                Float rate (0.5%)
-              </div>
-            </div>
+              
               <TooltipProvider>
                 <Tooltip>
-                  <TooltipTrigger className="ml-2 text-gray-400 hover:text-white">
+                  <TooltipTrigger className="text-gray-400 hover:text-white">
                     <HelpCircle className="w-5 h-5" />
                   </TooltipTrigger>
                   <TooltipContent side="bottom" className="bg-[#242942] border-gray-700 text-gray-200 max-w-xs p-3">
@@ -297,6 +297,7 @@ const ExchangeForm: React.FC<ExchangeFormProps> = ({ className }) => {
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
+            </div>
           </div>
           
           <button
