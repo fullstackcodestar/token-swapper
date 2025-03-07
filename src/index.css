@@ -130,11 +130,14 @@
 }
 
 .token-list {
-  @apply absolute top-full mt-2 right-0 w-80 bg-[#1a1d2e] border border-gray-700 rounded-lg shadow-xl z-50 overflow-hidden opacity-0 invisible transition-all duration-300 translate-y-2;
+  @apply absolute top-full mt-2 right-0 w-80 bg-[#1a1d2e] border border-gray-700 rounded-lg shadow-xl z-50 overflow-hidden opacity-0 pointer-events-none transition-all duration-300 translate-y-2;
 }
 
+/* Fix the circular dependency by removing @apply visible */
 .token-list.visible {
-  @apply opacity-100 visible translate-y-0;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
 }
 
 .token-search {
