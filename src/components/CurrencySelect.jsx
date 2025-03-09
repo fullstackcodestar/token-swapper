@@ -4,9 +4,9 @@ const CurrencySelect = ({ id, defaultValue, onCurrencyChange }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedCurrency, setSelectedCurrency] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const dropdownRef = useRef(null);
-  const selectRef = useRef(null);
+  const wrapperRef = useRef(null);
 
+  // Currency data
   const currencies = {
     popular: [
       { value: "BTC", label: "Bitcoin", network: "BTC", img: "btc", showNetwork: 0, coin: "BTC", inactive: 0, color: "#f7931a" },
@@ -23,36 +23,54 @@ const CurrencySelect = ({ id, defaultValue, onCurrencyChange }) => {
     ]
   };
 
+  // Find and set the initial currency based on defaultValue
   useEffect(() => {
     const allCurrencies = [...currencies.popular, ...currencies.all];
     const defaultCurrency = allCurrencies.find(c => c.value === defaultValue);
     if (defaultCurrency) {
       setSelectedCurrency(defaultCurrency);
     }
-    
-    document.addEventListener('click', handleClickOutside);
-    
-    const labelTrigger = document.getElementById(`select_label_${id.split('_').pop()}`);
-    if (labelTrigger) {
-      labelTrigger.addEventListener('click', () => setIsOpen(true));
-    }
-    
-    return () => {
-      document.removeEventListener('click', handleClickOutside);
-      if (labelTrigger) {
-        labelTrigger.removeEventListener('click', () => setIsOpen(true));
-      }
-    };
-  }, [defaultValue, id]);
+  }, [defaultValue]);
 
-  const handleClickOutside = (event) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target) && 
-        !event.target.classList.contains('selectCurrencyTrigger')) {
-      setIsOpen(false);
+  // Handle closing the dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
     }
+    
+    // Add when mounted, remove when unmounted
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [wrapperRef]);
+
+  // Handle clicking on label to show dropdown
+  useEffect(() => {
+    const labelElement = document.getElementById(`select_label_${id.split('_').pop()}`);
+    if (labelElement) {
+      const handleLabelClick = () => {
+        setIsOpen(true);
+      };
+      
+      labelElement.addEventListener('click', handleLabelClick);
+      return () => {
+        labelElement.removeEventListener('click', handleLabelClick);
+      };
+    }
+  }, [id]);
+
+  // Toggle dropdown
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
   };
 
+  // Select a currency from the dropdown
   const handleSelectCurrency = (currency) => {
+    if (currency.inactive === 1) return;
+    
     setSelectedCurrency(currency);
     setIsOpen(false);
     if (onCurrencyChange) {
@@ -60,6 +78,7 @@ const CurrencySelect = ({ id, defaultValue, onCurrencyChange }) => {
     }
   };
 
+  // Filter currencies based on search term
   const filteredCurrencies = {
     popular: currencies.popular.filter(currency => 
       currency.label.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -72,10 +91,102 @@ const CurrencySelect = ({ id, defaultValue, onCurrencyChange }) => {
   };
 
   return (
-    <div className="ui-select-wrapper" ref={dropdownRef}>
-      {/* Fixed select element - using defaultValue instead of selected */}
-      <select id={id} className="hidden" defaultValue={defaultValue} ref={selectRef}>
-        {currencies.popular.concat(currencies.all).map(currency => (
+    <div className={`ui-select-outer with-search ${isOpen ? '' : 'hidden-label'}`} data-value={selectedCurrency?.value} ref={wrapperRef}>
+           
+      {/* Dropdown list */}
+      {isOpen && (
+        <div className="ui-select-list">
+          {/* Search box */}
+          <div className="ui-select-search">
+            <span className="ui-select-search-ico ico"></span>
+            <input 
+              type="text" 
+              placeholder="Type a currency or ticker"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              autoFocus
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>
+          
+          {/* Currency list */}
+          <ul>
+            {/* Popular currencies */}
+            <li className="ui-select-separate">Popular currencies</li>
+            {filteredCurrencies.popular.map((currency) => (
+              <li 
+                key={currency.value}
+                id={`${id}_option_${currency.value}`}
+                className={`ui-select-option ${selectedCurrency?.value === currency.value ? 'hover' : ''} ${currency.inactive === 1 ? 'inactive' : ''}`}
+                data-value={currency.value}
+                onClick={() => handleSelectCurrency(currency)}
+              >
+                <div className="coin-ticker">
+                  <span className="name">{currency.coin}</span>
+                  {currency.showNetwork === 1 && (
+                    <sup data-network={currency.network}>
+                      <span>{currency.network}</span>
+                    </sup>
+                  )}
+                </div>
+                <div className={`coin-ico svgcoin ${currency.img}`}></div>
+                <div className="coin-outer">
+                  <span className="coin-name">{currency.label}</span>
+                </div>
+              </li>
+            ))}
+            
+            {/* All currencies */}
+            <li className="ui-select-separate">All currencies</li>
+            {filteredCurrencies.all.map((currency) => (
+              <li 
+                key={currency.value}
+                id={`${id}_option_${currency.value}`}
+                className={`ui-select-option ${selectedCurrency?.value === currency.value ? 'hover' : ''} ${currency.inactive === 1 ? 'inactive' : ''}`}
+                data-value={currency.value}
+                onClick={() => handleSelectCurrency(currency)}
+              >
+                <div className="coin-ticker">
+                  <span className="name">{currency.coin}</span>
+                  {currency.showNetwork === 1 && (
+                    <sup data-network={currency.network}>
+                      <span>{currency.network}</span>
+                    </sup>
+                  )}
+                </div>
+                <div className={`coin-ico svgcoin ${currency.img}`}></div>
+                <div className="coin-outer">
+                  <span className="coin-name">{currency.label}</span>
+                </div>
+              </li>
+            ))}
+            
+            {/* No results message */}
+            {filteredCurrencies.popular.length === 0 && filteredCurrencies.all.length === 0 && (
+              <li className="no-results">No currencies found</li>
+            )}
+          </ul>
+        </div>
+      )}
+      
+      {/* Hidden select element (for form compatibility) */}
+      <select id={id} className="hidden" defaultValue={defaultValue}>
+        <option label="separate">Popular currencies</option>
+        {currencies.popular.map(currency => (
+          <option 
+            key={currency.value}
+            value={currency.value} 
+            data-img={currency.img} 
+            data-network={currency.network}
+            data-shownetwork={currency.showNetwork}
+            data-coin={currency.coin}
+            data-inactive={currency.inactive}
+          >
+            {currency.label}
+          </option>
+        ))}
+        <option label="separate">All currencies</option>
+        {currencies.all.map(currency => (
           <option 
             key={currency.value}
             value={currency.value} 
@@ -89,114 +200,6 @@ const CurrencySelect = ({ id, defaultValue, onCurrencyChange }) => {
           </option>
         ))}
       </select>
-
-      <div 
-        className="ui-select-current" 
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        {selectedCurrency && (
-          <>
-            <div className="coin-ticker">
-              <span className="name">{selectedCurrency.coin}</span>
-              {selectedCurrency.showNetwork === 1 && (
-                <sup data-network={selectedCurrency.network}>
-                  <span>{selectedCurrency.network}</span>
-                </sup>
-              )}
-            </div>
-            <div className={`coin-ico svgcoin ${selectedCurrency.img}`}></div>
-            <div className="coin-outer">
-              <span className="coin-name">{selectedCurrency.label}</span>
-            </div>
-          </>
-        )}
-      </div>
-      
-      {isOpen && (
-        <div className="ui-select-dropdown">
-          <div className="ui-select-search">
-            <input 
-              type="text" 
-              placeholder="Type a currency or ticker"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              autoFocus
-            />
-            <div className="search-icon">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" 
-                  stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </div>
-          </div>
-          
-          <div className="currencies-group">
-            <div className="group-header">Popular currencies</div>
-            <ul className="currencies-list">
-              {filteredCurrencies.popular.map((currency) => (
-                <li 
-                  key={currency.value}
-                  className={`currency-item ${currency.inactive === 1 ? 'inactive' : ''}`}
-                  onClick={() => currency.inactive !== 1 && handleSelectCurrency(currency)}
-                >
-                  <div className="currency-icon">
-                    <div className={`coin-ico svgcoin ${currency.img}`}></div>
-                  </div>
-                  <div className="currency-name" style={{ color: currency.color }}>
-                    {currency.label}
-                    {currency.showNetwork === 1 && (
-                      <span className="network-tag">{currency.network}</span>
-                    )}
-                  </div>
-                  <div className="currency-ticker">
-                    {currency.coin}
-                    {currency.showNetwork === 1 && (
-                      <div className="network-badge">{currency.network}</div>
-                    )}
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-          
-          {filteredCurrencies.all.length > 0 && (
-            <div className="currencies-group">
-              <div className="group-header">All currencies</div>
-              <ul className="currencies-list">
-                {filteredCurrencies.all.map((currency) => (
-                  <li 
-                    key={currency.value}
-                    className={`currency-item ${currency.inactive === 1 ? 'inactive' : ''}`}
-                    onClick={() => currency.inactive !== 1 && handleSelectCurrency(currency)}
-                  >
-                    <div className="currency-icon">
-                      <div className={`coin-ico svgcoin ${currency.img}`}></div>
-                    </div>
-                    <div className="currency-name" style={{ color: currency.color }}>
-                      {currency.label}
-                      {currency.showNetwork === 1 && (
-                        <span className="network-tag">{currency.network}</span>
-                      )}
-                    </div>
-                    <div className="currency-ticker">
-                      {currency.coin}
-                      {currency.showNetwork === 1 && (
-                        <div className="network-badge">{currency.network}</div>
-                      )}
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-          
-          {filteredCurrencies.popular.length === 0 && filteredCurrencies.all.length === 0 && (
-            <div className="no-results">
-              No currencies found
-            </div>
-          )}
-        </div>
-      )}
     </div>
   );
 };

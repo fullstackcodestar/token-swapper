@@ -9,7 +9,7 @@ const ExchangeOptions = ({ formState, updateFormState }) => {
 
   const toggleDifference = (e) => {
     console.log(e);
-    
+
     // e.preventDefault();
     // setShowDifferenceModal(!showDifferenceModal);
   };
@@ -22,33 +22,33 @@ const ExchangeOptions = ({ formState, updateFormState }) => {
     <>
       <div className="exchange-wrapflex">
         <div className="exchange-option">
-          <header>Order type</header>
+          <p>Order type</p>
           <div className="exchange-option-inner">
             <label className="radioselect">
-              <input 
-                type="radio" 
-                name="select_type_from" 
-                value="fixed" 
-                id="fixed_type" 
+              <input
+                type="radio"
+                name="select_type_from"
+                value="fixed"
+                id="fixed_type"
                 checked={formState.exchangeType === 'fixed'}
                 onChange={() => handleExchangeTypeChange('fixed')}
               />
               <span>Fixed rate (1.0%)</span>
             </label>
             <label className="radioselect">
-              <input 
-                type="radio" 
-                name="select_type_from" 
-                value="float" 
-                id="float_type" 
+              <input
+                type="radio"
+                name="select_type_from"
+                value="float"
+                id="float_type"
                 checked={formState.exchangeType === 'float'}
                 onChange={() => handleExchangeTypeChange('float')}
               />
               <span>Float rate (0.5%)</span>
             </label>
           </div>
-          <span 
-            id="type_difference" 
+          <span
+            id="type_difference"
             className="exchange-option-diff"
             onClick={toggleDifference}
           >
@@ -58,17 +58,15 @@ const ExchangeOptions = ({ formState, updateFormState }) => {
             </div>
           </span>
         </div>
-        
-        <div className="exchange-button center">
-          <button 
-            id="exchange_submit" 
+
+          <button
+            id="exchange_submit"
             className={`exchange-submit ${!formState.isValid ? 'disabled' : ''}`}
             disabled={!formState.isValid}
             type="submit"
           >
             <span>Exchange now</span>
           </button>
-        </div>
       </div>
 
 
