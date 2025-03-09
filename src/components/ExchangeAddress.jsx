@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 import React, { useState, useEffect, useRef } from 'react';
+=======
+
+import React, { useState, useRef } from 'react';
+>>>>>>> d1a18e38e7d4d02c75917ee4e8f9d952d18da923
 
 const CurrencySelect = ({ id, defaultValue, onCurrencyChange }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -103,6 +108,7 @@ const CurrencySelect = ({ id, defaultValue, onCurrencyChange }) => {
   };
 
   return (
+<<<<<<< HEAD
     <div className={`ui-select-outer with-search ${isOpen ? '' : 'hidden-label'}`} data-value={selectedCurrency?.value} ref={wrapperRef}>
       {/* The visible select button */}
       <div className="ui-select-current" onClick={toggleDropdown}>
@@ -123,6 +129,58 @@ const CurrencySelect = ({ id, defaultValue, onCurrencyChange }) => {
             <div className="ui-select-arrow"></div>
           </>
         )}
+=======
+    <div className="exchange-address-wrap">
+      <div className="exchange-wallet active center">
+        <div className="wrap-header">
+          <header>Destination</header>
+        </div>
+        <div className="field">
+          <textarea 
+            className="nonextra" 
+            required 
+            id="receive_wallet" 
+            autoComplete="off"
+            value={formState.destinationAddress}
+            onChange={handleAddressChange}
+            ref={addressRef}
+          />
+          <span 
+            id="receive_wallet_error" 
+            className={`hint error ${addressError ? '' : 'hidden'}`}
+          >
+            Invalid address
+          </span>
+          <div className="funcbuttons">
+            <button 
+              type="button" 
+              className="ico paste hoverhl" 
+              id="wallet_paste" 
+              title="Paste"
+              onClick={handlePaste}
+            />
+            <button 
+              type="button" 
+              className="ico scanqr hoverhl" 
+              id="wallet_scanqr" 
+              title="Scan QR code" 
+            />
+            <button 
+              type="button" 
+              className="ico close hoverhl" 
+              id="wallet_clear"
+              onClick={handleClearAddress}
+            />
+          </div>
+          <div className="addresss-list-wrap">
+            <div 
+              className="addresss-list" 
+              id="wallet_addressbook" 
+              data-emptylist="Favorite address is empty" 
+            />
+          </div>
+        </div>
+>>>>>>> d1a18e38e7d4d02c75917ee4e8f9d952d18da923
       </div>
       
       {/* Dropdown list */}
@@ -316,4 +374,8 @@ const CurrencySelect = ({ id, defaultValue, onCurrencyChange }) => {
   );
 };
 
+<<<<<<< HEAD
 export default CurrencySelect;
+=======
+export default ExchangeAddress;
+>>>>>>> d1a18e38e7d4d02c75917ee4e8f9d952d18da923

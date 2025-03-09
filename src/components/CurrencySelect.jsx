@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 
 const CurrencySelect = ({ id, defaultValue, onCurrencyChange }) => {
@@ -91,6 +92,7 @@ const CurrencySelect = ({ id, defaultValue, onCurrencyChange }) => {
   };
 
   return (
+<<<<<<< HEAD
     <div className={`ui-select-outer with-search ${isOpen ? '' : 'hidden-label'}`} data-value={selectedCurrency?.value} ref={wrapperRef}>
            
       {/* Dropdown list */}
@@ -187,6 +189,12 @@ const CurrencySelect = ({ id, defaultValue, onCurrencyChange }) => {
         ))}
         <option label="separate">All currencies</option>
         {currencies.all.map(currency => (
+=======
+    <div className="ui-select-wrapper" ref={dropdownRef}>
+      {/* Hidden select element */}
+      <select id={id} className="hidden" defaultValue={defaultValue} ref={selectRef}>
+        {currencies.popular.concat(currencies.all).map(currency => (
+>>>>>>> d1a18e38e7d4d02c75917ee4e8f9d952d18da923
           <option 
             key={currency.value}
             value={currency.value} 
