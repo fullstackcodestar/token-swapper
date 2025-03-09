@@ -1,9 +1,5 @@
-<<<<<<< HEAD
-import React, { useState, useEffect, useRef } from 'react';
-=======
 
 import React, { useState, useRef } from 'react';
->>>>>>> d1a18e38e7d4d02c75917ee4e8f9d952d18da923
 
 const CurrencySelect = ({ id, defaultValue, onCurrencyChange }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -108,28 +104,6 @@ const CurrencySelect = ({ id, defaultValue, onCurrencyChange }) => {
   };
 
   return (
-<<<<<<< HEAD
-    <div className={`ui-select-outer with-search ${isOpen ? '' : 'hidden-label'}`} data-value={selectedCurrency?.value} ref={wrapperRef}>
-      {/* The visible select button */}
-      <div className="ui-select-current" onClick={toggleDropdown}>
-        {selectedCurrency && (
-          <>
-            <div className="coin-ticker">
-              <span className="name">{selectedCurrency.coin}</span>
-              {selectedCurrency.showNetwork === 1 && (
-                <sup data-network={selectedCurrency.network}>
-                  <span>{selectedCurrency.network}</span>
-                </sup>
-              )}
-            </div>
-            <div className={`coin-ico svgcoin ${selectedCurrency.img}`}></div>
-            <div className="coin-outer">
-              <span className="coin-name">{selectedCurrency.label}</span>
-            </div>
-            <div className="ui-select-arrow"></div>
-          </>
-        )}
-=======
     <div className="exchange-address-wrap">
       <div className="exchange-wallet active center">
         <div className="wrap-header">
@@ -180,7 +154,6 @@ const CurrencySelect = ({ id, defaultValue, onCurrencyChange }) => {
             />
           </div>
         </div>
->>>>>>> d1a18e38e7d4d02c75917ee4e8f9d952d18da923
       </div>
       
       {/* Dropdown list */}
@@ -374,8 +347,4 @@ const CurrencySelect = ({ id, defaultValue, onCurrencyChange }) => {
   );
 };
 
-<<<<<<< HEAD
-export default CurrencySelect;
-=======
 export default ExchangeAddress;
->>>>>>> d1a18e38e7d4d02c75917ee4e8f9d952d18da923

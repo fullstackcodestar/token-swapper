@@ -9,15 +9,8 @@ const ExchangeOptions = ({ formState, updateFormState }) => {
   };
 
   const toggleDifference = (e) => {
-<<<<<<< HEAD
-    console.log(e);
-
-    // e.preventDefault();
-    // setShowDifferenceModal(!showDifferenceModal);
-=======
     e.preventDefault();
     setShowDifferenceModal(!showDifferenceModal);
->>>>>>> d1a18e38e7d4d02c75917ee4e8f9d952d18da923
   };
 
   const closeModal = () => {
