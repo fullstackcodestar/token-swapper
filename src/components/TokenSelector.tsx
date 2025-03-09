@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { ChevronDown, Search } from 'lucide-react';
 import TokenIcon from './TokenIcon';
@@ -95,95 +94,6 @@ const TokenSelector: React.FC<TokenSelectorProps> = ({
         <TokenIcon symbol={selectedToken.shortSymbol} />
         <span className={cn("font-medium", symbolColor)}>{selectedToken.symbol}</span>
         <ChevronDown className="h-4 w-4 opacity-70" />
-      </div>
-
-      <div className={cn("token-list", isOpen ? "visible" : "")}>
-        <div className="token-search">
-          <div className="relative">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-400" />
-            <input
-              ref={searchInputRef}
-              type="text"
-              placeholder="Type a currency or ticker"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="transition-all duration-300"
-            />
-          </div>
-        </div>
-
-        <div className="max-h-[300px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent">
-          {popularTokens.length > 0 && (
-            <>
-              <div className="px-4 py-2 text-sm text-gray-400">Popular currencies</div>
-              {popularTokens.map((token) => (
-                <div
-                  key={token.symbol}
-                  className={cn(
-                    "token-item",
-                    selectedToken.symbol === token.symbol ? "token-item-active" : ""
-                  )}
-                  onClick={() => handleTokenSelect(token)}
-                >
-                  <div className="flex items-center gap-3">
-                    <TokenIcon symbol={token.shortSymbol} />
-                    <div>
-                      <div className="text-white">{token.name}</div>
-                      {token.network && (
-                        <div className="text-xs text-gray-400">{token.network}</div>
-                      )}
-                    </div>
-                  </div>
-                  <div className={cn("text-right font-medium", 
-                    token.shortSymbol === 'BTC' ? 'text-orange-400' : 
-                    token.shortSymbol === 'ETH' ? 'text-indigo-300' :
-                    token.shortSymbol === 'USDT' ? 'text-green-400' :
-                    token.shortSymbol === 'LTC' ? 'text-blue-300' :
-                    token.shortSymbol === 'XMR' ? 'text-orange-500' :
-                    'text-gray-300'
-                  )}>{token.symbol}</div>
-                </div>
-              ))}
-            </>
-          )}
-
-          {allTokens.length > 0 && (
-            <>
-              <div className="px-4 py-2 text-sm text-gray-400">All currencies</div>
-              {allTokens.map((token) => (
-                <div
-                  key={token.symbol}
-                  className={cn(
-                    "token-item",
-                    selectedToken.symbol === token.symbol ? "token-item-active" : ""
-                  )}
-                  onClick={() => handleTokenSelect(token)}
-                >
-                  <div className="flex items-center gap-3">
-                    <TokenIcon symbol={token.shortSymbol} />
-                    <div>
-                      <div className="text-white">{token.name}</div>
-                      {token.network && (
-                        <div className="text-xs text-gray-400">{token.network}</div>
-                      )}
-                    </div>
-                  </div>
-                  <div className={cn("text-right font-medium", 
-                    token.shortSymbol === 'ZRX' ? 'text-gray-300' : 
-                    token.shortSymbol === 'AAVE' ? 'text-purple-400' :
-                    token.shortSymbol === 'AVAX' ? 'text-red-400' :
-                    token.shortSymbol === 'BNB' ? 'text-yellow-400' :
-                    'text-gray-300'
-                  )}>{token.symbol}</div>
-                </div>
-              ))}
-            </>
-          )}
-
-          {filteredTokens.length === 0 && (
-            <div className="p-4 text-center text-gray-400">No tokens found</div>
-          )}
-        </div>
       </div>
     </div>
   );

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeftRight, Copy, HelpCircle, QrCode } from 'lucide-react';
+// import { ArrowLeftRight, Copy, Help, QrCode } from 'lucide-react';
 import { toast } from "sonner";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import TokenSelector, { Token } from './TokenSelector';
+import TokenInput from './TokenInput';
+import ExchangeRateInfoModal from './ExchangeRateInfoModal';
 import { cn } from '@/lib/utils';
 
 interface ExchangeFormProps {
@@ -10,25 +12,27 @@ interface ExchangeFormProps {
 }
 
 const ExchangeForm: React.FC<ExchangeFormProps> = ({ className }) => {
+  const [isSwitching, setIsSwitching] = useState<Boolean>(false);
   const [sendToken, setSendToken] = useState<Token>({
     name: 'Ethereum',
     symbol: 'ETH',
     shortSymbol: 'ETH',
     popular: true
   });
-  
+
   const [receiveToken, setReceiveToken] = useState<Token>({
     name: 'Litecoin',
     symbol: 'LTC',
     shortSymbol: 'LTC',
     popular: true
   });
-  
+
   const [sendAmount, setSendAmount] = useState<string>('1');
   const [receiveAmount, setReceiveAmount] = useState<string>('20.507137');
   const [destinationAddress, setDestinationAddress] = useState<string>('');
   const [orderType, setOrderType] = useState<'fixed' | 'float'>('float');
-  
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
   // Exchange rates (simplified for demo)
   const exchangeRates = {
     ETH: {
@@ -66,7 +70,7 @@ const ExchangeForm: React.FC<ExchangeFormProps> = ({ className }) => {
   // Helper to get exchange rate
   const getExchangeRate = (from: string, to: string): number => {
     if (from === to) return 1;
-    
+
     try {
       // @ts-ignore - simplified for demo
       return exchangeRates[from][to] || 1;
@@ -85,24 +89,30 @@ const ExchangeForm: React.FC<ExchangeFormProps> = ({ className }) => {
     }
   }, [sendAmount, sendToken, receiveToken]);
 
-  // Handle switching tokens
   const handleSwitchTokens = () => {
-    const tempToken = sendToken;
-    setSendToken(receiveToken);
-    setReceiveToken(tempToken);
-    
-    // Recalculate amounts
-    const rate = getExchangeRate(receiveToken.symbol, sendToken.symbol);
-    if (sendAmount) {
-      const calculated = (parseFloat(sendAmount) * rate).toFixed(7);
-      setReceiveAmount(calculated);
-    }
+    // Set switching state to trigger animations
+    setIsSwitching(true);
+
+    // Use setTimeout to let the animation happen before switching tokens
+    setTimeout(() => {
+      const tempToken = sendToken;
+      setSendToken(receiveToken);
+      setReceiveToken(tempToken);
+
+      // Recalculate amounts
+      const rate = getExchangeRate(receiveToken.symbol, sendToken.symbol);
+      if (sendAmount) {
+        const calculated = (parseFloat(sendAmount) * rate).toFixed(7);
+        setReceiveAmount(calculated);
+      }
+
+    }, 200);
   };
 
   // Get USD value
   const getUsdValue = (amount: string, token: Token): string => {
     if (!amount) return '0.00';
-    
+
     let usdRate = 0;
     try {
       // @ts-ignore - simplified for demo
@@ -110,7 +120,7 @@ const ExchangeForm: React.FC<ExchangeFormProps> = ({ className }) => {
     } catch (e) {
       usdRate = token.symbol === 'USDT' ? 1 : 0;
     }
-    
+
     return (parseFloat(amount) * usdRate).toFixed(2);
   };
 
@@ -133,172 +143,112 @@ const ExchangeForm: React.FC<ExchangeFormProps> = ({ className }) => {
       <div className="mb-8 text-center">
         <h1 className="text-4xl font-bold text-white tracking-tight mb-2">Payrius Exchange</h1>
       </div>
-      
+
       <div className="relative">
-        {/* Exchange inputs container */}
-        <div className="relative flex flex-row gap-4 mb-8">
-          {/* Send section */}
-          <div className="w-full">
-            <div className="flex justify-between items-center mb-1">
-              <label className="text-white opacity-80 text-sm">Send</label>
-              <span className="text-white opacity-80 text-sm">{sendToken.name}</span>
-            </div>
-            
-            <div className="input-send relative">
-              <div className="flex items-center p-2">
-                <input
-                  type="text"
-                  value={sendAmount}
-                  onChange={(e) => {
-                    const value = e.target.value.replace(/[^0-9.]/g, '');
-                    setSendAmount(value);
-                  }}
-                  className="flex-1 bg-[transparent] text-2xl text-white p-2 focus:outline-none"
-                  placeholder="0"
-                />
-                <TokenSelector
-                  selectedToken={sendToken}
-                  onTokenSelect={setSendToken}
-                  variant="send"
-                />
-              </div>
-            </div>
-            
-            <div className="flex justify-between text-sm mt-1">
-              <div className="text-gray-400">
-                min: 0.005 {sendToken.symbol}
-              </div>
-              <div className="text-gray-400">
-                max: 13.1264821 {sendToken.symbol}
-              </div>
-            </div>
-          </div>
-          
-          {/* Switch button */}
-          <div className="flex items-center justify-center z-10">
-            <button 
-              onClick={handleSwitchTokens} 
-              className="flex items-center justify-center text-blue-400"
+        <div className="flex items-center gap-4 mb-8 w-full relative flex-col md:flex-row">
+          <TokenInput
+            label="Send"
+            value={sendAmount}
+            onChange={setSendAmount}
+            selectedToken={sendToken}
+            onTokenSelect={setSendToken}
+            variant="send"
+            minAmount="0.005"
+            maxAmount="13.1264821"
+            className={`transition-all duration-300 ease-in-out ${isSwitching ? 'border-blue-500' : ''
+              }`}
+            labelClassName={`transition-colors duration-300 ${isSwitching ? 'text-blue-500' : ''
+              }`}
+          />
+
+          <div className="flex-shrink-0 w-10 flex justify-center items-center">
+            <button
+              onClick={handleSwitchTokens}
+              className={`flex items-center justify-center ${isSwitching
+                ? 'text-blue-500 rotate-180'
+                : 'text-blue-400'
+                } transition-all duration-500 ease-in-out`}
             >
-              <ArrowLeftRight className="w-6 h-6" />
+              <i className="pi pi-arrow-right-arrow-left"></i>
             </button>
           </div>
-          
-          {/* Receive section */}
-          <div className="w-full">
-            <div className="flex justify-between items-center mb-1">
-              <label className="text-blue-400 text-sm">Receive</label>
-              <span className="text-blue-400 text-sm">{receiveToken.name}</span>
-            </div>
-            
-            <div className="input-receive relative">
-              <div className="flex items-center p-2">
-                <input
-                  type="text"
-                  value={receiveAmount}
-                  readOnly
-                  className="flex-1 bg-transparent text-2xl text-white p-2 focus:outline-none"
-                  placeholder="0"
-                />
-                <TokenSelector
-                  selectedToken={receiveToken}
-                  onTokenSelect={setReceiveToken}
-                  variant="receive"
-                />
-              </div>
-            </div>
-            
-            <div className="flex justify-between text-sm mt-1">
-              <div className="text-gray-400">
-                1 {receiveToken.symbol} = {getExchangeRate(receiveToken.symbol, sendToken.symbol)} {sendToken.symbol}
-              </div>
-              <div className="text-gray-400">
-                ${getUsdValue(receiveAmount, receiveToken)}
-              </div>
-            </div>
-          </div>
+
+          <TokenInput
+            label="Receive"
+            value={receiveAmount}
+            selectedToken={receiveToken}
+            onTokenSelect={setReceiveToken}
+            variant="receive"
+            readOnly
+            exchangeRate={`1 ${receiveToken.symbol} = ${getExchangeRate(receiveToken.symbol, sendToken.symbol)} ${sendToken.symbol}`}
+            usdValue={getUsdValue(receiveAmount, receiveToken)}
+            className={`transition-all duration-300 ease-in-out ${isSwitching ? 'border-blue-500' : ''
+              }`}
+            labelClassName={`transition-colors duration-300 ${isSwitching ? 'text-blue-500' : ''
+              }`}
+          />
         </div>
-        
-        {/* Mobile switch button - only shown on mobile */}
-        <div className="md:hidden flex justify-center my-4">
-          <button 
-            onClick={handleSwitchTokens} 
-            className="flex items-center justify-center w-10 h-10 rounded-full bg-[#1c1f2e] border border-gray-700"
-          >
-            <ArrowLeftRight className="w-5 h-5 text-blue-300" />
-          </button>
-        </div>
-        
+
         {/* Destination address */}
         <div className="mb-8">
           <div className="flex justify-between items-center mb-1">
             <label className="text-white opacity-80 text-sm">Destination</label>
           </div>
-          
+
           <div className="relative">
             <input
               type="text"
               value={destinationAddress}
               onChange={(e) => setDestinationAddress(e.target.value)}
               placeholder={`Your ${receiveToken.name} address`}
-              className="w-full bg-[#00000080] text-white border border-[#ff1493] rounded-xl p-4 pr-20 transition-all duration-300"
+              className="w-full bg-[#00000080] text-white border border-[#ff1493] rounded-xl p-4 pr-20 transition-all duration-300 text-base"
             />
             <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center space-x-2">
-              <button 
+              <button
                 onClick={handleCopyAddress}
-                className="p-2 text-gray-400 hover:text-white transition-colors"
+                className="p-2 text-gray-400 text-white transition-colors"
               >
-                <Copy className="w-5 h-5" />
+                <i className="pi pi-clipboard text-2xl"></i>
               </button>
-              <button className="p-2 text-gray-400 hover:text-white transition-colors">
-                <QrCode className="w-5 h-5" />
+              <button className="p-2 text-gray-400 text-white transition-colors">
+                <i className="pi pi-qrcode text-2xl"></i>
               </button>
             </div>
           </div>
         </div>
-        
+
         {/* Order type and exchange button */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-white text-sm font-bold">Order type</span>
-              
-              <div className="order-tabs">
-                <div 
-                  className={cn(
-                    "order-tab", 
-                    orderType === 'fixed' ? "order-tab-active" : "order-tab-inactive"
-                  )}
-                  onClick={() => setOrderType('fixed')}
-                >
-                  Fixed rate (1.0%)
-                </div>
-                <div 
-                  className={cn(
-                    "order-tab", 
-                    orderType === 'float' ? "order-tab-active" : "order-tab-inactive"
-                  )}
-                  onClick={() => setOrderType('float')}
-                >
-                  Float rate (0.5%)
-                </div>
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 relative items-center md:items-start">
+          <div className="flex items-start gap-2 relative flex-col md:flex-row md:items-center w-full md:w-auto">
+            <span className="text-white text-base font-bold">Order type</span>
+            <div className="order-tabs w-full md:w-auto">
+              <div
+                className={cn(
+                  "order-tab text-base w-1/2 md:w-auto",
+                  orderType === 'fixed' ? "order-tab-active" : "order-tab-inactive"
+                )}
+                onClick={() => setOrderType('fixed')}
+              >
+                Fixed rate (1.0%)
               </div>
-              
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger className="text-gray-400 hover:text-white">
-                    <HelpCircle className="w-5 h-5" />
-                  </TooltipTrigger>
-                  <TooltipContent side="bottom" className="bg-[#242942] border-gray-700 text-gray-200 max-w-xs p-3">
-                    <h4 className="font-semibold text-white mb-1">What is the difference?</h4>
-                    <p className="mb-2"><strong>Fixed rate:</strong> Exchange rate is locked in when you place your order. Fee is 1.0%.</p>
-                    <p><strong>Float rate:</strong> Exchange rate will be determined at the time of exchange. Fee is 0.5%.</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+              <div
+                className={cn(
+                  "order-tab text-base w-1/2 md:w-auto",
+                  orderType === 'float' ? "order-tab-active" : "order-tab-inactive"
+                )}
+                onClick={() => setOrderType('float')}
+              >
+                Float rate (0.5%)
+              </div>
+            </div>
+            <div className="group tooltip rounded-full bg-[#00000080] text-white flex align-middle gap-2 p-[4px_12px] cursor-pointer"
+              onClick={() => setIsModalOpen(true)}>
+              <div className="text-white hover:text-white  rounded-full">?</div>
+              <div className="tooltip-content text-[0.8em]/[1.8em] hidden group-hover:block">
+                What is the difference?
+              </div>
             </div>
           </div>
-          
           <button
             className="exchange-button"
             onClick={() => {
@@ -308,7 +258,7 @@ const ExchangeForm: React.FC<ExchangeFormProps> = ({ className }) => {
                 });
                 return;
               }
-              
+
               toast.success("Exchange initiated", {
                 description: `Exchanging ${sendAmount} ${sendToken.symbol} for ${receiveAmount} ${receiveToken.symbol}`
               });
@@ -317,14 +267,17 @@ const ExchangeForm: React.FC<ExchangeFormProps> = ({ className }) => {
             Exchange now
           </button>
         </div>
-        
+
         {/* Exchange info */}
         <div className="mt-6 text-xs text-gray-400 text-center">
           <p className="mb-1">The exchange service is provided by <span className="text-blue-400">FixedFloat</span>. Creating an order confirms your agreement with the <span className="text-blue-400">FixedFloat</span> rules.</p>
           <p>By using the site and creating an exchange, you agree to the Payrius' <span className="text-blue-400 cursor-pointer">Terms of Services</span> and <span className="text-blue-400 cursor-pointer">Privacy Policy</span>.</p>
         </div>
       </div>
-    </div>
+
+      {/* Exchange Rate Info Modal */}
+      <ExchangeRateInfoModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+    </div >
   );
 };
 
