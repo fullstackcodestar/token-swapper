@@ -1,3 +1,4 @@
+
 import React from 'react';
 import CurrencySelect from './CurrencySelect';
 
@@ -71,7 +72,7 @@ const ExchangeAmounts = ({ formState, updateFormState, handleSwapCurrencies }) =
             onChange={handleFromAmountChange}
             id="select_amount_from"
             data-dir="from" 
-            maxLength={18} 
+            maxLength="18" 
           />
           <div id="select_maxmin_from" className="hint maxmin">
             {formState.fromAmount && parseFloat(formState.fromAmount) > 0 && 
@@ -130,7 +131,7 @@ const ExchangeAmounts = ({ formState, updateFormState, handleSwapCurrencies }) =
             onChange={handleToAmountChange}
             id="select_amount_to"
             data-dir="to" 
-            maxLength={18} 
+            maxLength="18" 
           />
           <div id="select_maxmin_to" className="hint maxmin"></div>
           <span id="select_hinterror_to" className="hint error"></span>

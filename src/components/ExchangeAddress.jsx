@@ -1,3 +1,4 @@
+
 import React, { useState, useRef } from 'react';
 
 const ExchangeAddress = ({ formState, updateFormState }) => {
@@ -64,7 +65,6 @@ const ExchangeAddress = ({ formState, updateFormState }) => {
         <div className="field">
           <textarea 
             className="nonextra" 
-            type="text" 
             required 
             id="receive_wallet" 
             autoComplete="off"

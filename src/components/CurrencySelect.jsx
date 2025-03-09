@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 
 const CurrencySelect = ({ id, defaultValue, onCurrencyChange }) => {
@@ -73,7 +74,7 @@ const CurrencySelect = ({ id, defaultValue, onCurrencyChange }) => {
 
   return (
     <div className="ui-select-wrapper" ref={dropdownRef}>
-      {/* Fixed select element - using defaultValue instead of selected */}
+      {/* Hidden select element */}
       <select id={id} className="hidden" defaultValue={defaultValue} ref={selectRef}>
         {currencies.popular.concat(currencies.all).map(currency => (
           <option 

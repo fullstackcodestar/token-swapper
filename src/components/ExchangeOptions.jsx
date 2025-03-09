@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 
 const ExchangeOptions = ({ formState, updateFormState }) => {
@@ -8,10 +9,8 @@ const ExchangeOptions = ({ formState, updateFormState }) => {
   };
 
   const toggleDifference = (e) => {
-    console.log(e);
-    
-    // e.preventDefault();
-    // setShowDifferenceModal(!showDifferenceModal);
+    e.preventDefault();
+    setShowDifferenceModal(!showDifferenceModal);
   };
 
   const closeModal = () => {
@@ -52,7 +51,7 @@ const ExchangeOptions = ({ formState, updateFormState }) => {
             className="exchange-option-diff"
             onClick={toggleDifference}
           >
-            <div className="exchange-option-diff-inner" onClick={toggleDifference}>
+            <div className="exchange-option-diff-inner">
               <i>?</i>
               <font>What is the difference?</font>
             </div>
@@ -70,8 +69,6 @@ const ExchangeOptions = ({ formState, updateFormState }) => {
           </button>
         </div>
       </div>
-
-
     </>
   );
 };
