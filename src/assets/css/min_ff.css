@@ -3508,7 +3508,7 @@ button.exchange-submit.loading>span:before {
 }
 
 .coin-outer {
-    align-items: center;
+    align-items: flex-start;
     display: flex;
     height: 1.5em;
     flex: 1
