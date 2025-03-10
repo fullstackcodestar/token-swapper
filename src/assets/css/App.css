@@ -27,10 +27,6 @@
   animation-timing-function: ease;
 }
 
-#root {
-  height: 100vh;
-  overflow: hidden;
-}
 
 @keyframes bounce {
 
