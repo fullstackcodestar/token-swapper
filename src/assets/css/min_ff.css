@@ -1374,7 +1374,6 @@ body.index header#header>.wrapper {
 }
 
 #header nav {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     display: flex;
     justify-content: space-between
 }
@@ -4901,14 +4900,6 @@ section.last-orders {
         padding-bottom: 3em
     }
 
-    .main-background>svg,
-    .main-background>img {
-        width: auto;
-        height: 67em;
-        bottom: auto;
-        top: 0;
-        transform: translate(-50%, 0px)
-    }
 
     .exchange-wrapflex>.exchange-option {
         width: 100%;
